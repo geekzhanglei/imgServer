@@ -1,0 +1,16 @@
+{
+  "name": "imgserver",
+  "version": "1.0.0",
+  "description": "img server by koa2",
+  "main": "index.js",
+  "author": "geekzl",
+  "license": "MIT",
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "koa": "^2.6.2",
+    "koa-body": "^4.0.4",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
+    "path": "^0.12.7"
+  }
+}
