@@ -4,6 +4,8 @@ const serve = require('koa-static');
 const path = require('path');
 const fs = require('fs');
 const koaBody = require('koa-body');
+const domain = 'api.feroad.com:7000';
+const staticDomain = 'api.feroad.com'
 
 const app = new Koa();
 
@@ -23,10 +25,8 @@ app.use(async (ctx, next) => {
 });
 // 启动静态服务器
 console.log('启动静态服务器');
-const staticFilePath = '/static/';
-const serverPath = path.join(__dirname, staticFilePath);
-app.use(serve(serverPath));
-console.log(`静态资源地址${serverPath}`);
+// const staticFilePath = '/static/';
+const serverPath = '/home/zhanglei/api';
 
 // post请求路由
 router.post('/upload', async function (ctx, next) {
@@ -51,8 +51,8 @@ router.post('/upload', async function (ctx, next) {
 
 app.use(router.routes());
 
-app.listen(8081);
-console.log('listening on port 8081');
+app.listen(7000);
+console.log('listening on port 7000');
 
 // 子函数
 async function uploadFile(ctx, options) {
@@ -76,11 +76,11 @@ async function uploadFile(ctx, options) {
     console.log('上传成功，图片本地地址是' + newFilePath);
     removeTemImage(file.path);
     const relativePath = path.join(fileType, newFileName);
-    const servePath = path.join(ctx.request.header.host, relativePath);
-    console.log(`线上地址是 http://${servePath},`);
+    const servePath = path.join(staticDomain, relativePath);
+    console.log(`线上地址是 https://${servePath},`);
 
     return {
-        imgPath: `http://${servePath}`
+        imgPath: `https://${servePath}`
     };
 }
 
