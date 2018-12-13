@@ -1,14 +1,26 @@
 const Koa = require('koa');
 const router = require('koa-router')();
-const serve = require('koa-static');
 const path = require('path');
 const fs = require('fs');
 const koaBody = require('koa-body');
-const domain = 'api.feroad.com:7000';
-const staticDomain = 'api.feroad.com'
+const cors = require('koa2-cors');
+
+const staticDomain = 'api.feroad.com';
 
 const app = new Koa();
-
+app.use(cors({
+    origin: function(ctx) {
+      if (ctx.url === '/test') {
+        return false;
+      }
+      return '*';
+    },
+    exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
+    maxAge: 5,
+    credentials: true,
+    allowMethods: ['GET', 'POST', 'DELETE'],
+    allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  }));
 // 支持post请求并设定上传文件大小
 app.use(
     koaBody({
@@ -30,9 +42,11 @@ const serverPath = '/home/zhanglei/api';
 
 // post请求路由
 router.post('/upload', async function (ctx, next) {
+    console.log('请求开始处理');
     if (!ctx.request.files.file.size) { // 如果文件不存在，终止
         return;
     }
+    console.log("获取上传图像");
     // 获取上传图片
     const result = await uploadFile(ctx, {
         fileType: 'img',
